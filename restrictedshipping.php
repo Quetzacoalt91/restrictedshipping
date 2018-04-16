@@ -59,29 +59,15 @@ class RestrictedShipping extends CarrierModule
      */
     public function install()
     {
-        if (extension_loaded('curl') == false)
-        {
-            $this->_errors[] = $this->l('You have to enable the cURL extension on your server to install this module');
-            return false;
-        }
-
         $carrier = $this->addCarrier();
         $this->addZones($carrier);
         $this->addGroups($carrier);
         $this->addRanges($carrier);
-        Configuration::updateValue('RESTRICTEDSHIPPING_LIVE_MODE', false);
 
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('updateCarrier');
-    }
-
-    public function uninstall()
-    {
-        Configuration::deleteByName('RESTRICTEDSHIPPING_LIVE_MODE');
-
-        return parent::uninstall();
     }
 
     /**
@@ -143,37 +129,26 @@ class RestrictedShipping extends CarrierModule
                 'icon' => 'icon-cogs',
                 ),
                 'input' => array(
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Live mode'),
-                        'name' => 'RESTRICTEDSHIPPING_LIVE_MODE',
-                        'is_bool' => true,
-                        'desc' => $this->l('Use this module in live mode'),
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                   array(
+                        'col' => 3,
+                        'label' => $this->trans('Free shipping starts at', array(), 'Admin.Shipping.Feature'),
+                        'desc' => str_replace(
+                            array('[1]', '[/1]'),
+                            array('<a href="'.Context::getContext()->link->getAdminLink('AdminShipping').'">', '</a>'),
+                            $this->l('Core parameter. It must be greater than 0 for the test and can be modified in [1]shipping settings[/1].')),
+                        'suffix' => $this->context->currency->getSign(),
+                        'cast' => 'floatval',
+                        'type' => 'text',
+                        'disabled' => true,
+                        'name' => 'PS_SHIPPING_FREE_PRICE'
                     ),
                     array(
                         'col' => 3,
                         'type' => 'text',
-                        'prefix' => '<i class="icon icon-envelope"></i>',
-                        'desc' => $this->l('Enter a valid email address'),
-                        'name' => 'RESTRICTEDSHIPPING_ACCOUNT_EMAIL',
-                        'label' => $this->l('Email'),
-                    ),
-                    array(
-                        'type' => 'password',
-                        'name' => 'RESTRICTEDSHIPPING_ACCOUNT_PASSWORD',
-                        'label' => $this->l('Password'),
+                        'suffix' => $this->context->currency->getSign(),
+                        'desc' => $this->l('Carrier will be hidden when this products total is reached'),
+                        'name' => 'RESTRICTEDSHIPPING_MAX_TOTAL_ALLOWED',
+                        'label' => $this->l('Max allowed cart total'),
                     ),
                 ),
                 'submit' => array(
@@ -189,9 +164,8 @@ class RestrictedShipping extends CarrierModule
     protected function getConfigFormValues()
     {
         return array(
-            'RESTRICTEDSHIPPING_LIVE_MODE' => Configuration::get('RESTRICTEDSHIPPING_LIVE_MODE', true),
-            'RESTRICTEDSHIPPING_ACCOUNT_EMAIL' => Configuration::get('RESTRICTEDSHIPPING_ACCOUNT_EMAIL', 'contact@prestashop.com'),
-            'RESTRICTEDSHIPPING_ACCOUNT_PASSWORD' => Configuration::get('RESTRICTEDSHIPPING_ACCOUNT_PASSWORD', null),
+            'RESTRICTEDSHIPPING_MAX_TOTAL_ALLOWED' => Configuration::get('RESTRICTEDSHIPPING_MAX_TOTAL_ALLOWED', null, null, null, 300),
+            'PS_SHIPPING_FREE_PRICE' => Configuration::get('PS_SHIPPING_FREE_PRICE'),
         );
     }
 

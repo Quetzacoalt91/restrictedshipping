@@ -27,23 +27,16 @@
 	<h3><i class="icon icon-truck"></i> {l s='My shipping module' mod='RestrictedShipping'}</h3>
 	<img src="{$module_dir|escape:'html':'UTF-8'}/logo.png" id="payment-logo" class="pull-right" />
 	<p>
-		<strong>{l s='Here is my new shipping module!' mod='RestrictedShipping'}</strong><br />
-		{l s='Thanks to PrestaShop, now I have a great shipping module.' mod='RestrictedShipping'}<br />
-		{l s='I can configure it using the following configuration form.' mod='RestrictedShipping'}
+		<strong>{l s='Here is a shipping test module!' mod='RestrictedShipping'}</strong><br />
+		{l s='It can be used to confirm a carrier can now be disabled, even if the core makes all carriers free in some case.' mod='RestrictedShipping'}<br /><br />
+		{l s='With this module, we consider it cannot provide shipping services if the products price is greated than a given amount.' mod='RestrictedShipping'}<br />
+		{l s='i.e: For insurance reasons.' mod='RestrictedShipping'}<br />
 	</p>
 	<br />
-	<p>	
-		{l s='This module will boost your sales!' mod='RestrictedShipping'}
-	</p>
-</div>
-
-<div class="panel">
-	<h3><i class="icon icon-tags"></i> {l s='Documentation' mod='RestrictedShipping'}</h3>
-	<p>
-		&raquo; {l s='You can get a PDF documentation to configure this module' mod='RestrictedShipping'} :
-		<ul>
-			<li><a href="#" target="_blank">{l s='English' mod='RestrictedShipping'}</a></li>
-			<li><a href="#" target="_blank">{l s='French' mod='RestrictedShipping'}</a></li>
-		</ul>
-	</p>
+    <p>
+    <ul>
+        <li><b>Pull-request:</b> <a href="https://github.com/PrestaShop/PrestaShop/pull/7944">Link to GitHub</a></li>
+        <li><b>Forge issue:</b> <a href="http://forge.prestashop.com/browse/BOOM-1390">Link to Jira</a></li>
+    </ul>
+    </p>
 </div>
